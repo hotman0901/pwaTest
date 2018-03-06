@@ -1,0 +1,47 @@
+body, * {
+    margin: 0;
+    padding: 0;
+}
+.header
+{
+    height: 80px;
+    background-color: rgba(143, 61, 61, 0.644);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo
+{
+    height: 50px;
+}
+
+#todoInput
+{
+    display: flex;
+    padding: 50px 20px;
+    /* height: calc(100vh - 50px); */
+}
+
+#todoList li
+{
+    display: flex;
+    padding: 20px;
+    color: red;
+    font-size: 50px;
+    font-weight: 500;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.add
+{
+    width: 100px;
+    height: 100px;
+}
+
+.input
+{
+    height: 20px;
+}

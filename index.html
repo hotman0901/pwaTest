@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PWA To-Do List123</title>
+    <link rel="stylesheet" href="./src/main.css">
+    <link rel="manifest" href="/manifest.json">  
+</head>
+
+<body>
+    <header class="header">
+        <img class="logo" src="./assets/images/logo_todo.png" alt="" />
+    </header>
+    <div id="todoInput" class="input-content">
+        <img class="add" src="./assets/images/ic_add.jpeg" alt="" />
+        <img src="./assets/images/icon-192x192.png" alt="">
+    </div>
+    <div id="todoList"></div>
+    <script>
+        // step1.去判斷瀏覽器是否有支援 Service Worker
+        if ('serviceWorker' in navigator) {
+            // 註冊自己的Service Worker
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('SW registered!', reg))
+                .catch(err => console.log('Error!', err));
+        }
+    </script>
+    <script src="./main.js"></script>
+</body>
+
+</html>
