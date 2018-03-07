@@ -5,7 +5,7 @@ body, * {
 .header
 {
     height: 80px;
-    background-color: rgba(143, 61, 61, 0.644);
+    background-color: red;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -44,4 +44,10 @@ body, * {
 .input
 {
     height: 20px;
+}
+
+
+.enable-notifications
+{
+    display: none;
 }

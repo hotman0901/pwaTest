@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>PWA To-Do List123</title>
     <link rel="stylesheet" href="./src/main.css">
-    <link rel="manifest" href="/manifest.json">  
+    <link rel="manifest" href="/manifest.json">
 </head>
 
 <body>
@@ -17,7 +17,85 @@
         <img src="./assets/images/icon-192x192.png" alt="">
     </div>
     <div id="todoList"></div>
+    <input type="button" value="推播" class="enable-notifications">
     <script>
+        // 推播功能
+        var enableNotifications = document.querySelectorAll('.enable-notifications');
+        if ('Notification' in window) {
+            for (var i = 0; i < enableNotifications.length; i++) {
+                enableNotifications[i].style.display = 'inline-block';
+                enableNotifications[i].addEventListener('click', askForNotificationPermission);
+            }
+        }
+
+        // 這個是從DOM發出的
+        // function displayNotification() {
+        //     new Notification('訂閱成功！！！');
+        // }
+
+        function displayNotification() {
+            if ('serviceWorker' in navigator) {
+                // content 內容 可以有以下參數
+                // icon - 網站icon圖示，塞url
+                // image - 內容圖片，塞url
+                // dir - 文字顯示方向，ltr指由左至右
+                // lang - 語言代碼，根據[https://tools.ietf.org/html/bcp47](BCP 47)，繁中zh-Hant
+                // vibrate - 裝置的振動模式。例如: [100, 50, 200]指震動100ms，暫停50ms，再振動200ms
+                // badge - 顯示在狀態列的圖示，塞url
+                // tag - 通知的ID
+                // renotify - 設定同一組通知更新後，是否要在通知使用者一次，塞true/false
+                // actions - 設定通知上的選項(action)
+                var options = {
+                    body: '歡迎進入30天PWA的世界',
+                    tag: 'confirm-notification',
+                    renotify: true,
+                    dir: 'ltr',
+                    lang: 'zh-Hant', //BCP 47
+                    actions: [
+                        { action: 'confirm', title: '確認' },
+                        { action: 'cancel', title: '取消' }
+                    ]
+                };
+                navigator.serviceWorker.ready
+                    .then(function (sw) {
+                        sw.showNotification('hello~~~~~訂閱成功！！！', options);
+                    })
+            }
+
+        }
+
+        function askForNotificationPermission() {
+            Notification.requestPermission(function (status) {
+                console.log('User Choice', status);
+                if (status !== 'granted') {
+                    console.log('推播允許被拒絕了!');
+                } else {
+                    displayNotification();
+                    // setPushSubscribe();
+                }
+            });
+        }
+
+
+        // 推播
+        function setPushSubscribe() {
+            if (!('serviceWorker' in navigator))
+                return;
+
+            navigator.serviceWorker.ready
+                .then(function (sw) {
+                    return sw.pushManager.getSubscription();
+                })
+                .then(function (sub) {
+                    if (sub === null) {
+                        //建立新的訂閱
+
+                    } else {
+                        //已經訂閱
+                    }
+                });
+        }
+
         // step1.去判斷瀏覽器是否有支援 Service Worker
         if ('serviceWorker' in navigator) {
             // 註冊自己的Service Worker

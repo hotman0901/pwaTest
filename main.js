@@ -7,11 +7,9 @@
     .then(res => res.json())
     .then(json => {
         todoList = todoList.concat(json);
-        console.log(todoList);
         renderTodoList(todoList); // render todoList
     })
     .catch(err => {
-        console.log(err);
     })  
 
     const todoListDOM = document.getElementById('todoList');

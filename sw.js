@@ -10,14 +10,12 @@ const filesToCache = [
 
 // 快取名稱（自訂）
 const cacheName = "pwaTest123";
-const dataUrl = 'static';
+const dataUrl = "static";
 
 // step3.install
 self.addEventListener("install", event => {
-  console.log("installing…");
   event.waitUntil(
     caches.open(cacheName).then(cache => {
-      console.log("Caching app ok");
       // 加入要cache的file路徑
       return cache.addAll(filesToCache);
     })
@@ -26,27 +24,23 @@ self.addEventListener("install", event => {
 
 // activate
 // step4.清除舊有cache
-self.addEventListener('activate', function(e) {  
-    console.log('[ServiceWorker] Activate');  
-    e.waitUntil(  
-      caches.keys().then(function(keyList) {  
-        return Promise.all(keyList.map(function(key) {  
-          console.log('[ServiceWorker] Removing old cache', key);  
-          if (key !== cacheName && key !== dataUrl) {  
-            return caches.delete(key);  
-          }  
-        }));  
-      })  
-    );  
-  });
+self.addEventListener("activate", function(e) {
+  e.waitUntil(
+    caches.keys().then(function(keyList) {
+      return Promise.all(
+        keyList.map(function(key) {
+          if (key !== cacheName && key !== dataUrl) {
+            return caches.delete(key);
+          }
+        })
+      );
+    })
+  );
+});
 
 // fetch
 // step5.用來攔截Requests
 self.addEventListener("fetch", event => {
-  console.log("now fetch!");
-  console.log("event.request:", event.request);
-  console.log("[ServiceWorker] Fetch", event.request.url);
-  
   // Request 要透過 respondWith 方法、才能將 response 回傳給網頁。
   event.respondWith(
     // 如果網站失去網路連線，我們可以回傳 cached 過的 response，提供網站資料、讓使用者能夠持續進行瀏覽
@@ -68,4 +62,38 @@ self.addEventListener("fetch", event => {
       );
     })
   );
+});
+
+// 點擊推播
+self.addEventListener("notificationclick", event => {
+  var notification = event.notification;
+  var action = event.action;
+
+  console.log(notification);
+  if (action === "confirm") {
+    console.log("使用者點選確認");
+    notification.close();
+  } else {
+    console.log(action);
+  }
+});
+
+// 取消訂閱
+self.addEventListener('notificationclose', function(event){
+  console.log('使用者沒興趣',event);
+});
+
+// 推送
+self.addEventListener('push', function(event) {
+  console.log('[Service Worker] Push Received.');
+  console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
+
+  const title = 'Push Codelab';
+  const options = {
+    body: 'Yay it works.',
+    icon: '/assets/images/icon-192x192.png',
+    badge: '/assets/images/icon-192x192.png'
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
 });
