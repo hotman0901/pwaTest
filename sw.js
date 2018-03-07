@@ -10,6 +10,7 @@ const filesToCache = [
 
 // 快取名稱（自訂）
 const cacheName = "pwaTest123";
+const dataUrl = 'static';
 
 // step3.install
 self.addEventListener("install", event => {
@@ -31,7 +32,7 @@ self.addEventListener('activate', function(e) {
       caches.keys().then(function(keyList) {  
         return Promise.all(keyList.map(function(key) {  
           console.log('[ServiceWorker] Removing old cache', key);  
-          if (key !== cacheName) {  
+          if (key !== cacheName && key !== dataUrl) {  
             return caches.delete(key);  
           }  
         }));  
@@ -45,7 +46,7 @@ self.addEventListener("fetch", event => {
   console.log("now fetch!");
   console.log("event.request:", event.request);
   console.log("[ServiceWorker] Fetch", event.request.url);
-  const dataUrl = 'static';
+  
   // Request 要透過 respondWith 方法、才能將 response 回傳給網頁。
   event.respondWith(
     // 如果網站失去網路連線，我們可以回傳 cached 過的 response，提供網站資料、讓使用者能夠持續進行瀏覽
